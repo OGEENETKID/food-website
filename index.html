@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amagwinya — Bolt Side Husle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Work+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="grain"></div>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="#top" class="logo">Amagwinya<span class="logo-flames">🔥🔥</span></a>
+    <nav class="main-nav">
+      <a href="#menu">Menu</a>
+      <a href="#how">How it works</a>
+      <a href="#order">Delivery info</a>
+    </nav>
+    <a href="#menu" class="btn btn-ghost nav-cta">Start order</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow">Bolt Side Husle · Fresh to order, every night</p>
+        <h1>Get your<br><span class="hl">fat cake</span> fix.</h1>
+        <p class="hero-sub">Hot amagwinya, snacks, bread and drinks — made to order and delivered straight to your CPUT residence room. No queue, no shop run, just WhatsApp and wait.</p>
+        <div class="hero-actions">
+          <a href="#menu" class="btn btn-primary">Browse the menu</a>
+          <a href="#how" class="btn btn-text">How ordering works ↓</a>
+        </div>
+        <div id="order-status" class="order-status" role="status">
+          <span class="dot"></span>
+          <span id="order-status-text">Checking tonight's order window…</span>
+        </div>
+      </div>
+
+      <div class="hero-ticket" aria-hidden="true">
+        <div class="ticket">
+          <div class="ticket-notch ticket-notch-top"></div>
+          <p class="ticket-store">AMAGWINYA · BOLT SIDE HUSLE</p>
+          <p class="ticket-line">2x Fat Cake (Cheese) ......... R18</p>
+          <p class="ticket-line">1x 2L Stoney ................ R30</p>
+          <p class="ticket-line">1x Spokies (Pelepele) ........ R6</p>
+          <p class="ticket-rule">– – – – – – – – – – – – – – –</p>
+          <p class="ticket-line ticket-total">TOTAL ........................ R54</p>
+          <p class="ticket-line ticket-foot">→ Steve Biko, Rm 214</p>
+          <p class="ticket-line ticket-foot">→ Delivered before class</p>
+          <div class="ticket-notch ticket-notch-bottom"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how">
+    <div class="wrap">
+      <h2 class="section-title">Three steps, no app to install</h2>
+      <ol class="steps">
+        <li class="step">
+          <span class="step-num">01</span>
+          <h3>Build your order</h3>
+          <p>Tap through the menu below — fat cakes, drinks, bread, chips, sweets and chocolates. Your ticket fills in on the side as you go.</p>
+        </li>
+        <li class="step">
+          <span class="step-num">02</span>
+          <h3>Add your residence</h3>
+          <p>Tell us which CPUT residence and room you're in. That's the only address our guys need to find you on campus.</p>
+        </li>
+        <li class="step">
+          <span class="step-num">03</span>
+          <h3>Send on WhatsApp</h3>
+          <p>One tap sends your full order straight to our WhatsApp. We confirm, and it's cooked and delivered fresh.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ORDER WINDOW INFO -->
+  <section class="window-info" id="order">
+    <div class="wrap window-grid">
+      <div>
+        <h2 class="section-title">Order windows</h2>
+        <p class="window-copy">Fat cakes are made fresh to order, not stockpiled — so orders close ahead of time to give us cooking time.</p>
+        <div class="window-card">
+          <p class="window-card-label">Morning session</p>
+          <p class="window-card-time">9:00 PM – 11:00 PM</p>
+          <p class="window-card-note">the night before delivery</p>
+        </div>
+        <p class="window-copy small">Order outside this window and we'll queue it for the next session — your ticket will still send, just let us know it's for later.</p>
+      </div>
+      <div>
+        <h2 class="section-title">Delivery area</h2>
+        <p class="window-copy">We deliver to student residences across CPUT's Cape Peninsula campuses. Pop your residence name and room/unit number into the order form so our delivery guy can find you fast.</p>
+        <p class="window-copy small">Don't see your residence listed anywhere — no problem, there's no fixed list. Just type it exactly as you'd tell a friend giving directions.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section class="menu" id="menu">
+    <div class="wrap">
+      <h2 class="section-title">The menu</h2>
+      <p class="section-sub">Tap an item to add it to your ticket. Fat cakes are priced as a base cake plus your filling of choice.</p>
+
+      <div class="menu-tabs" id="menu-tabs"></div>
+      <div class="menu-panels" id="menu-panels"></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FLOATING CART TOGGLE (mobile) -->
+<button id="cart-toggle" class="cart-toggle" aria-expanded="false" aria-controls="ticket-panel">
+  <span id="cart-toggle-count">0</span> items · view ticket
+</button>
+
+<!-- TICKET / CART PANEL -->
+<aside id="ticket-panel" class="ticket-panel">
+  <div class="ticket-panel-inner">
+    <button id="ticket-close" class="ticket-close" aria-label="Close order ticket">✕</button>
+    <h2 class="ticket-panel-title">Your ticket</h2>
+
+    <div id="ticket-items" class="ticket-items">
+      <p class="ticket-empty">Nothing on the ticket yet — add a fat cake or two.</p>
+    </div>
+
+    <div class="ticket-total-row">
+      <span>Total</span>
+      <span id="ticket-total">R0</span>
+    </div>
+
+    <form id="delivery-form" class="delivery-form">
+      <label for="residence">Residence name</label>
+      <input type="text" id="residence" name="residence" placeholder="e.g. Steve Biko Residence" required>
+
+      <label for="room">Room / unit number</label>
+      <input type="text" id="room" name="room" placeholder="e.g. Room 214" required>
+
+      <label for="session">Which session is this for?</label>
+      <select id="session" name="session">
+        <option value="Morning session (9–11pm tonight)">Morning session (9–11pm tonight)</option>
+        <option value="Next available session">Next available session</option>
+      </select>
+
+      <label for="notes">Anything else? (optional)</label>
+      <textarea id="notes" name="notes" rows="2" placeholder="e.g. extra spicy, call when you arrive"></textarea>
+    </form>
+
+    <a id="whatsapp-send" class="btn btn-primary btn-whatsapp" target="_blank" rel="noopener">
+      Send order on WhatsApp
+    </a>
+    <p class="ticket-helper">Opens WhatsApp with your order pre-typed — review and hit send there to confirm with us.</p>
+  </div>
+</aside>
+<div id="ticket-backdrop" class="ticket-backdrop"></div>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div>
+      <p class="logo footer-logo">Amagwinya<span class="logo-flames">🔥🔥</span></p>
+      <p class="footer-tag">Bolt Side Husle — fresh fat cakes, snacks &amp; drinks delivered to your residence.</p>
+    </div>
+    <div class="footer-contact">
+      <p class="footer-label">Contact / WhatsApp</p>
+      <p><a href="https://wa.me/27645139675">064 513 9675</a></p>
+      <p><a href="https://wa.me/27769616072">+27 76 961 6072</a></p>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
