@@ -1,8 +1,4 @@
-/* ===========================================================
-   AMAGWINYA — menu data, cart logic, WhatsApp checkout
-   =========================================================== */
-
-const WHATSAPP_NUMBER = "27645139675"; // 064 513 9675, international format, no +
+const WHATSAPP_NUMBER = "27787732609";
 
 const MENU = [
   {
@@ -79,8 +75,7 @@ const MENU = [
   }
 ];
 
-/* ----------------- cart state (in-memory only) ----------------- */
-let cart = []; // { lineId, name, qty, unitPrice, note }
+let cart = [];
 
 function formatR(n){
   return "R" + n.toFixed(n % 1 === 0 ? 0 : 2);
@@ -110,7 +105,6 @@ function cartCount(){
   return cart.reduce((sum, l) => sum + l.qty, 0);
 }
 
-/* ----------------- render menu ----------------- */
 function renderMenu(){
   const tabsEl = document.getElementById("menu-tabs");
   const panelsEl = document.getElementById("menu-panels");
@@ -123,10 +117,18 @@ function renderMenu(){
     tab.type = "button";
     tab.textContent = cat.label;
     tab.dataset.cat = cat.id;
+    tab.id = "tab-" + cat.id;
+    tab.setAttribute("role", "tab");
+    tab.setAttribute("aria-selected", idx === 0 ? "true" : "false");
+    tab.setAttribute("aria-controls", "panel-" + cat.id);
     tab.addEventListener("click", () => {
-      document.querySelectorAll(".menu-tab").forEach(t => t.classList.remove("is-active"));
+      document.querySelectorAll(".menu-tab").forEach(t => {
+        t.classList.remove("is-active");
+        t.setAttribute("aria-selected", "false");
+      });
       document.querySelectorAll(".menu-panel").forEach(p => p.classList.remove("is-active"));
       tab.classList.add("is-active");
+      tab.setAttribute("aria-selected", "true");
       document.getElementById("panel-" + cat.id).classList.add("is-active");
     });
     tabsEl.appendChild(tab);
@@ -134,6 +136,8 @@ function renderMenu(){
     const panel = document.createElement("div");
     panel.className = "menu-panel" + (idx === 0 ? " is-active" : "");
     panel.id = "panel-" + cat.id;
+    panel.setAttribute("role", "tabpanel");
+    panel.setAttribute("aria-labelledby", "tab-" + cat.id);
 
     if (cat.note){
       const p = document.createElement("p");
@@ -268,7 +272,6 @@ function buildItemCard(item){
   return card;
 }
 
-/* ----------------- render ticket / cart panel ----------------- */
 function renderTicket(){
   const itemsEl = document.getElementById("ticket-items");
   const totalEl = document.getElementById("ticket-total");
@@ -297,6 +300,7 @@ function renderTicket(){
       removeBtn.type = "button";
       removeBtn.className = "ticket-row-remove";
       removeBtn.textContent = "remove";
+      removeBtn.setAttribute("aria-label", "Remove " + line.name + " from ticket");
       removeBtn.addEventListener("click", () => removeLine(line.lineId));
       left.appendChild(document.createElement("br"));
       left.appendChild(removeBtn);
@@ -315,31 +319,59 @@ function renderTicket(){
 
   const count = cartCount();
   toggleCount.textContent = count;
-  toggleBtn.classList.toggle("is-visible", count > 0 && window.innerWidth <= 900);
+  toggleBtn.classList.toggle("is-visible", count > 0);
 
+  clearTicketError();
   updateWhatsappLink();
 }
 
 function openTicketBriefHighlight(){
-  // On mobile, surface the toggle button once an item is added.
-  if (window.innerWidth <= 900){
-    document.getElementById("cart-toggle").classList.add("is-visible");
-  }
+  document.getElementById("cart-toggle").classList.add("is-visible");
 }
 
-/* ----------------- ticket panel open/close ----------------- */
+let lastFocusedEl = null;
+
 function openTicket(){
+  lastFocusedEl = document.activeElement;
   document.getElementById("ticket-panel").classList.add("is-open");
+  document.getElementById("ticket-panel").setAttribute("aria-hidden", "false");
   document.getElementById("ticket-backdrop").classList.add("is-visible");
   document.getElementById("cart-toggle").setAttribute("aria-expanded", "true");
+  document.getElementById("ticket-close").focus();
 }
 function closeTicket(){
   document.getElementById("ticket-panel").classList.remove("is-open");
+  document.getElementById("ticket-panel").setAttribute("aria-hidden", "true");
   document.getElementById("ticket-backdrop").classList.remove("is-visible");
   document.getElementById("cart-toggle").setAttribute("aria-expanded", "false");
+  if (lastFocusedEl) lastFocusedEl.focus();
 }
 
-/* ----------------- WhatsApp checkout ----------------- */
+function openNav(){
+  document.getElementById("main-nav").classList.add("is-open");
+  document.getElementById("nav-backdrop").classList.add("is-visible");
+  document.getElementById("nav-toggle").setAttribute("aria-expanded", "true");
+}
+function closeNav(){
+  document.getElementById("main-nav").classList.remove("is-open");
+  document.getElementById("nav-backdrop").classList.remove("is-visible");
+  document.getElementById("nav-toggle").setAttribute("aria-expanded", "false");
+}
+
+function clearTicketError(){
+  const errEl = document.getElementById("ticket-error");
+  errEl.hidden = true;
+  errEl.textContent = "";
+  document.getElementById("residence").classList.remove("is-invalid");
+  document.getElementById("room").classList.remove("is-invalid");
+}
+
+function showTicketError(message){
+  const errEl = document.getElementById("ticket-error");
+  errEl.hidden = false;
+  errEl.textContent = message;
+}
+
 function updateWhatsappLink(){
   const link = document.getElementById("whatsapp-send");
   const residence = document.getElementById("residence").value.trim();
@@ -364,14 +396,31 @@ function updateWhatsappLink(){
   link.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 }
 
-/* ----------------- order window status ----------------- */
+function handleWhatsappClick(e){
+  clearTicketError();
+  const residenceEl = document.getElementById("residence");
+  const roomEl = document.getElementById("room");
+
+  if (cart.length === 0){
+    e.preventDefault();
+    showTicketError("Add at least one item to your ticket before sending your order.");
+    return;
+  }
+  if (!residenceEl.value.trim() || !roomEl.value.trim()){
+    e.preventDefault();
+    showTicketError("Please add your residence and room/unit number so we can find you.");
+    if (!residenceEl.value.trim()) residenceEl.classList.add("is-invalid");
+    if (!roomEl.value.trim()) roomEl.classList.add("is-invalid");
+    (residenceEl.value.trim() ? roomEl : residenceEl).focus();
+  }
+}
+
 function updateOrderStatus(){
   const el = document.getElementById("order-status");
   const textEl = document.getElementById("order-status-text");
   const now = new Date();
   const hour = now.getHours();
 
-  // Morning session ordering window: 9pm (21:00) – 11pm (23:00) the previous night.
   const open = hour >= 21 && hour < 23;
 
   if (open){
@@ -386,7 +435,6 @@ function updateOrderStatus(){
   }
 }
 
-/* ----------------- init ----------------- */
 document.addEventListener("DOMContentLoaded", () => {
   renderMenu();
   renderTicket();
@@ -397,10 +445,27 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("ticket-close").addEventListener("click", closeTicket);
   document.getElementById("ticket-backdrop").addEventListener("click", closeTicket);
 
+  document.getElementById("nav-toggle").addEventListener("click", () => {
+    const isOpen = document.getElementById("main-nav").classList.contains("is-open");
+    if (isOpen) closeNav(); else openNav();
+  });
+  document.getElementById("nav-backdrop").addEventListener("click", closeNav);
+  document.querySelectorAll("#main-nav a").forEach(a => a.addEventListener("click", closeNav));
+
+  document.getElementById("whatsapp-send").addEventListener("click", handleWhatsappClick);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    if (document.getElementById("ticket-panel").classList.contains("is-open")) closeTicket();
+    if (document.getElementById("main-nav").classList.contains("is-open")) closeNav();
+  });
+
   ["residence", "room", "session", "notes"].forEach(id => {
     document.getElementById(id).addEventListener("input", updateWhatsappLink);
     document.getElementById(id).addEventListener("change", updateWhatsappLink);
   });
+  document.getElementById("residence").addEventListener("input", () => document.getElementById("residence").classList.remove("is-invalid"));
+  document.getElementById("room").addEventListener("input", () => document.getElementById("room").classList.remove("is-invalid"));
 
   window.addEventListener("resize", renderTicket);
 });
