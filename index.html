@@ -6,7 +6,7 @@
 <title>Amagwinya — Bolt Side Husle</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Work+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;0,600;0,700;0,800;1,600;1,700&family=Work+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,18 +16,22 @@
 <header class="site-header">
   <div class="wrap header-inner">
     <a href="#top" class="logo">Amagwinya<span class="logo-flames">🔥🔥</span></a>
-    <nav class="main-nav">
+    <nav class="main-nav" id="main-nav">
       <a href="#menu">Menu</a>
       <a href="#how">How it works</a>
       <a href="#order">Delivery info</a>
+      <a href="#menu" class="btn btn-primary nav-cta-mobile">Start order</a>
     </nav>
     <a href="#menu" class="btn btn-ghost nav-cta">Start order</a>
+    <button id="nav-toggle" class="nav-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
+<div id="nav-backdrop" class="nav-backdrop"></div>
 
 <main id="top">
 
-  <!-- HERO -->
   <section class="hero">
     <div class="wrap hero-inner">
       <div class="hero-copy">
@@ -61,7 +65,6 @@
     </div>
   </section>
 
-  <!-- HOW IT WORKS -->
   <section class="how" id="how">
     <div class="wrap">
       <h2 class="section-title">Three steps, no app to install</h2>
@@ -85,7 +88,6 @@
     </div>
   </section>
 
-  <!-- ORDER WINDOW INFO -->
   <section class="window-info" id="order">
     <div class="wrap window-grid">
       <div>
@@ -106,26 +108,23 @@
     </div>
   </section>
 
-  <!-- MENU -->
   <section class="menu" id="menu">
     <div class="wrap">
       <h2 class="section-title">The menu</h2>
       <p class="section-sub">Tap an item to add it to your ticket. Fat cakes are priced as a base cake plus your filling of choice.</p>
 
-      <div class="menu-tabs" id="menu-tabs"></div>
+      <div class="menu-tabs" id="menu-tabs" role="tablist" aria-label="Menu categories"></div>
       <div class="menu-panels" id="menu-panels"></div>
     </div>
   </section>
 
 </main>
 
-<!-- FLOATING CART TOGGLE (mobile) -->
 <button id="cart-toggle" class="cart-toggle" aria-expanded="false" aria-controls="ticket-panel">
   <span id="cart-toggle-count">0</span> items · view ticket
 </button>
 
-<!-- TICKET / CART PANEL -->
-<aside id="ticket-panel" class="ticket-panel">
+<aside id="ticket-panel" class="ticket-panel" aria-hidden="true">
   <div class="ticket-panel-inner">
     <button id="ticket-close" class="ticket-close" aria-label="Close order ticket">✕</button>
     <h2 class="ticket-panel-title">Your ticket</h2>
@@ -148,13 +147,15 @@
 
       <label for="session">Which session is this for?</label>
       <select id="session" name="session">
-        <option value="Morning session (9–11pm tonight)">Morning session (9–11pm tonight)</option>
+        <option value="Morning session (9–11pm)">Morning session (9–11pm)</option>
         <option value="Next available session">Next available session</option>
       </select>
 
       <label for="notes">Anything else? (optional)</label>
       <textarea id="notes" name="notes" rows="2" placeholder="e.g. extra spicy, call when you arrive"></textarea>
     </form>
+
+    <p id="ticket-error" class="ticket-error" role="alert" hidden></p>
 
     <a id="whatsapp-send" class="btn btn-primary btn-whatsapp" target="_blank" rel="noopener">
       Send order on WhatsApp
@@ -172,8 +173,7 @@
     </div>
     <div class="footer-contact">
       <p class="footer-label">Contact / WhatsApp</p>
-      <p><a href="https://wa.me/27645139675">064 513 9675</a></p>
-      <p><a href="https://wa.me/27769616072">+27 76 961 6072</a></p>
+      <p><a href="https://wa.me/27787732609">078 773 2609</a></p>
     </div>
   </div>
 </footer>
